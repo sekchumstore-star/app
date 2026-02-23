@@ -240,9 +240,9 @@
         });
     }
 
-    // ===== PM2.5 (WAQI) =====
+    // ===== PM2.5 (WAQI - Phitsanulok) =====
 
-    const CITY = "bangkok";
+    const CITY = "phitsanulok";
 
     // 🔴🔴🔴 ใส่ TOKEN ของคุณตรงนี้ 🔴🔴🔴
     const TOKEN = "0348e653509aa51b33fdeea00dc6bc5b0c7c3598";
@@ -260,7 +260,7 @@
         const value = data.data.iaqi.pm25.v;
 
         document.getElementById("pmValue").innerText = value + " µg/m³";
-        document.getElementById("pmLocation").innerText = "พื้นที่: Bangkok";
+        document.getElementById("pmLocation").innerText = "พื้นที่: Phitsanulok";
 
         if (value <= 25) {
           document.getElementById("pmValue").style.color = "#06C755";
