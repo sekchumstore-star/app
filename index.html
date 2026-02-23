@@ -8,8 +8,8 @@
   <link rel="icon" href="https://raw.githubusercontent.com/sekartwork-creator/app/main/192.png" type="image/png">
 
   <title>ระบบเช็คชื่อเข้า-ออกงาน</title>
+
   <style>
-    /* ===== Body (จัดกลางทั้งแนวตั้ง/แนวนอน) ===== */
     body {
       margin: 0;
       padding: 20px;
@@ -23,38 +23,24 @@
       box-sizing: border-box;
     }
 
- /* ===== โลโก้ + ชื่อบริษัท ===== */
     .logo-container {
       text-align: center;
       margin-bottom: 30px;
     }
 
     .logo-container img {
-      width: 120px; /* ปรับขนาดโลโก้ */
+      width: 120px;
       height: auto;
       margin-bottom: 10px;
     }
 
-    .logo-container h3 {
-      color: #06C755;
-      font-weight: 700;
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    
-    /* ===== Header ===== */
     h1 {
       color: #06C755;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       text-align: center;
     }
 
-    h3 {
-    color: #06C755;
-    }
-    
-    /* ===== LINE Login ===== */
     .login-line {
       font-weight: 700;
       color: #000;
@@ -64,30 +50,39 @@
       text-align: left;
     }
 
-    /* ===== Dropdown / Textarea ===== */
+    /* ===== PM2.5 ===== */
+    #pmSection {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #pmValue {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    #pmLocation {
+      font-size: 14px;
+      color: #666;
+    }
+
     .dropdown-btn, textarea {
       width: 100%;
       max-width: 400px;
       padding: 15px;
       margin-bottom: 15px;
-      border: 1.5px solid #ccc;     
-      border-radius: 10px;          
+      border: 1.5px solid #ccc;
+      border-radius: 10px;
       font-size: 1rem;
-      background: #f9f9f9;          
+      background: #f9f9f9;
       outline: none;
       box-sizing: border-box;
       cursor: pointer;
     }
 
     .dropdown-btn:focus, textarea:focus {
-      border: 1.5px solid #06C755;  
+      border: 1.5px solid #06C755;
       background: #fff;
-    }
-
-    /* Placeholder ให้เป็นสีเทาบางๆ */
-    textarea::placeholder {
-      color: #aaa;
-      font-style: italic;
     }
 
     textarea {
@@ -95,7 +90,6 @@
       height: 80px;
     }
 
-    /* Dropdown content */
     .dropdown {
       position: relative;
       width: 100%;
@@ -128,7 +122,6 @@
       color: #fff;
     }
 
-    /* ===== Button ===== */
     .btn {
       width: 100%;
       max-width: 400px;
@@ -147,7 +140,6 @@
       background-color: #049645;
     }
 
-    /* ===== Result ===== */
     #result {
       text-align: center;
       font-size: 1.2rem;
@@ -158,41 +150,34 @@
     .success { color: green; }
     .error { color: red; }
 
-    /* ===== Footer ===== */
     footer {
       margin-top: 30px;
       font-size: 0.85rem;
       color: #666;
       text-align: center;
     }
-
-    footer a {
-      color: #3768fa;
-      text-decoration: none;
-      margin: 0 5px;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
 
-
-  <!-- โลโก้และชื่อบริษัท -->
   <div class="logo-container">
     <img src="https://github.com/sekchumstore-star/app/blob/main/66.png?raw=true" alt="โลโก้">
   </div>
-  
+
   <h1>Attendance ID</h1>
+
+  <!-- PM2.5 Section -->
+  <div id="pmSection">
+    <div style="font-weight:600;">ค่าฝุ่น PM2.5 ปัจจุบัน</div>
+    <div id="pmValue">กำลังโหลด...</div>
+    <div id="pmLocation"></div>
+  </div>
+
   <div class="login-line">Check in name ID</div>
 
   <div class="dropdown">
     <div class="dropdown-btn" id="dropdownBtn">-- เลือกชื่อเจ้าหน้าที่ --</div>
-    <div class="dropdown-content" id="employeeList">
-      <!-- รายชื่อพนักงานจาก GAS -->
-    </div>
+    <div class="dropdown-content" id="employeeList"></div>
   </div>
 
   <textarea id="note" placeholder="รายละเอียดเพิ่มเติม"></textarea>
@@ -201,17 +186,13 @@
 
   <footer>
     <div>About Business ID</div>
-    <div>
-      <a href="#">Help</a> |
-      <a href="#">Terms of Use</a>
-    </div>
   </footer>
 
-  <audio id="successSound" src="https://firebasestorage.googleapis.com/v0/b/sekkport.appspot.com/o/new-notification-015-363677.mp3?alt=media&token=74f2ee1e-021a-4306-9d18-fcbe5d06291b"></audio>
+  <audio id="successSound" src="https://firebasestorage.googleapis.com/v0/b/sekkport.appspot.com/o/new-notification-015-363677.mp3?alt=media"></audio>
   <audio id="errorSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
   <script>
-    const deploymentURL = 'https://script.google.com/macros/s/AKfycbzXpHmn8hELWTs4gd2zddUnCc1Z5cOSe4tktUylmx1bz7hDf4qGJJ8WfcM-3Wr_WXwHYQ/exec'; // ใส่ URL ของ Web App GAS
+    const deploymentURL = 'https://script.google.com/macros/s/AKfycbzXpHmn8hELWTs4gd2zddUnCc1Z5cOSe4tktUylmx1bz7hDf4qGJJ8WfcM-3Wr_WXwHYQ/exec';
 
     let selectedStaffId = '';
     let selectedStaffName = '';
@@ -225,8 +206,6 @@
           data.forEach(emp => {
             const div = document.createElement('div');
             div.textContent = emp.name;
-            div.dataset.id = emp.id;
-            div.dataset.name = emp.name;
             div.onclick = () => {
               selectedStaffId = emp.id;
               selectedStaffName = emp.name;
@@ -235,8 +214,7 @@
             };
             list.appendChild(div);
           });
-        })
-        .catch(err => console.error(err));
+        });
     }
 
     document.getElementById('dropdownBtn').onclick = () => {
@@ -260,31 +238,44 @@
         .then(response => {
           resultDiv.textContent = response.msg;
           resultDiv.className = response.status === "success" ? "success" : "error";
-          if(response.status === "success"){
-            document.getElementById('successSound').play();
-          } else {
-            document.getElementById('errorSound').play();
-          }
-        })
-        .catch(err => console.error(err));
+          document.getElementById(response.status === "success" ? 'successSound' : 'errorSound').play();
+        });
     }
 
-    // โหลดพนักงานเมื่อหน้าเว็บเปิด
+    // ===== PM2.5 (OpenAQ) =====
+    const CITY = "Bangkok";
+
+    async function loadPM25() {
+      try {
+        const res = await fetch(`https://api.openaq.org/v2/latest?city=${CITY}&parameter=pm25`);
+        const data = await res.json();
+
+        if (!data.results || data.results.length === 0) {
+          document.getElementById("pmValue").innerText = "ไม่มีข้อมูล";
+          return;
+        }
+
+        const value = data.results[0].measurements[0].value;
+        document.getElementById("pmValue").innerText = value + " µg/m³";
+        document.getElementById("pmLocation").innerText = "พื้นที่: " + CITY;
+
+        if (value <= 25) {
+          document.getElementById("pmValue").style.color = "#06C755";
+        } else if (value <= 50) {
+          document.getElementById("pmValue").style.color = "#ff9800";
+        } else {
+          document.getElementById("pmValue").style.color = "#e53935";
+        }
+
+      } catch (err) {
+        document.getElementById("pmValue").innerText = "โหลดไม่สำเร็จ";
+      }
+    }
+
     loadEmployees();
+    loadPM25();
+    setInterval(loadPM25, 300000);
   </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
