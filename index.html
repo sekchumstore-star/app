@@ -50,7 +50,6 @@
       text-align: left;
     }
 
-    /* ===== PM2.5 ===== */
     #pmSection {
       text-align: center;
       margin-bottom: 20px;
@@ -166,7 +165,6 @@
 
   <h1>Attendance ID</h1>
 
-  <!-- PM2.5 Section -->
   <div id="pmSection">
     <div style="font-weight:600;">ค่าฝุ่น PM2.5 ปัจจุบัน</div>
     <div id="pmValue">กำลังโหลด...</div>
@@ -242,22 +240,27 @@
         });
     }
 
-    // ===== PM2.5 (OpenAQ) =====
-    const CITY = "Bangkok";
+    // ===== PM2.5 (WAQI) =====
+
+    const CITY = "bangkok";
+
+    // 🔴🔴🔴 ใส่ TOKEN ของคุณตรงนี้ 🔴🔴🔴
+    const TOKEN = "0348e653509aa51b33fdeea00dc6bc5b0c7c3598";
 
     async function loadPM25() {
       try {
-        const res = await fetch(`https://api.openaq.org/v2/latest?city=${CITY}&parameter=pm25`);
+        const res = await fetch(`https://api.waqi.info/feed/${CITY}/?token=${TOKEN}`);
         const data = await res.json();
 
-        if (!data.results || data.results.length === 0) {
+        if (data.status !== "ok") {
           document.getElementById("pmValue").innerText = "ไม่มีข้อมูล";
           return;
         }
 
-        const value = data.results[0].measurements[0].value;
+        const value = data.data.iaqi.pm25.v;
+
         document.getElementById("pmValue").innerText = value + " µg/m³";
-        document.getElementById("pmLocation").innerText = "พื้นที่: " + CITY;
+        document.getElementById("pmLocation").innerText = "พื้นที่: Bangkok";
 
         if (value <= 25) {
           document.getElementById("pmValue").style.color = "#06C755";
